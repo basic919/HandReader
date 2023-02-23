@@ -1,12 +1,10 @@
-from flask_restx import Namespace, Resource, fields
-from flask import request, render_template, redirect, url_for, make_response
+from flask_restx import Namespace, Resource
+from flask import render_template, redirect, url_for, make_response
 
-from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+from flask_login import login_user, login_required, logout_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
-
-
 from exts import db, bcrypt
 from models.user_model import User
 
@@ -14,14 +12,14 @@ from models.user_model import User
 api = Namespace('user', description="A namespace for User")
 
 
-data_sources_model = api.model(
-    "Users",
-    {
-        "id": fields.Integer(),
-        "address": fields.String(),
-        "password": fields.String(),
-    }
-)
+# data_sources_model = api.model(
+#     "Users",
+#     {
+#         "id": fields.Integer(),
+#         "address": fields.String(),
+#         "password": fields.String(),
+#     }
+# )
 
 
 @api.route('/home')
@@ -75,7 +73,6 @@ class Register(Resource):
             db.session.add(new_user)
             db.session.commit()
             return redirect(url_for('user_dashboard'))
-
 
 
 class RegisterForm(FlaskForm):
