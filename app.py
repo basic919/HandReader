@@ -6,14 +6,17 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
 
+from exts import db, bcrypt, login_manager
+from models.user_model import User
+
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'lkghIUG80yIUOtyIIN07giyOIFG78'
 
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
+db.init_app(app)
+bcrypt.init_app(app)
 
-login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'  # provjeri
 
@@ -23,10 +26,10 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    address = db.Column(db.String(20), nullable=False, unique=True)
-    password = db.Column(db.String(80), nullable=False)
+# class User(db.Model, UserMixin):
+#     id = db.Column(db.Integer, primary_key=True)
+#     address = db.Column(db.String(40), nullable=False, unique=True)
+#     password = db.Column(db.String(80), nullable=False)
 
 
 class RegisterForm(FlaskForm):
@@ -61,6 +64,13 @@ def home():
     return render_template('home.html')
 
 
+@app.route('/migrate')
+def migrate():
+    with app.app_context():
+        db.create_all()
+        print("migrated")
+        return "migrated"
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -71,6 +81,17 @@ def login():
                 login_user(user)
                 return redirect(url_for('dashboard'))
     return render_template('login.html', form=form)
+
+# @app.route('/loginx', methods=['GET', 'POST'])
+# def login():
+#     form = LoginForm()
+#     if form.validate_on_submit():
+#         user = User.query.filter_by(address=form.address.data).first()
+#         if user:
+#             if bcrypt.check_password_hash(user.password, form.password.data):
+#                 login_user(user)
+#                 return redirect(url_for('dashboard'))
+#     return render_template('login.html', form=form)
 
 
 @app.route('/dashboard', methods=['GET', 'POST'])
@@ -92,7 +113,7 @@ def register():
 
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data)
-        new_user = User(username=form.username.data, password=hashed_password)  # type: ignore
+        new_user = User(address=form.address.data, password=hashed_password)  # type: ignore
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('login'))
@@ -101,7 +122,8 @@ def register():
 
 
 if __name__ == '__main__':
-    # with app.app_context():
-    #     db.create_all()
+    with app.app_context():
+        db.create_all()
+        print("migrated")
 
-    app.run(debug=True)
+    #app.run(debug=True)
