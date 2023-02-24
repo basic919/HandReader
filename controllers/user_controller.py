@@ -1,4 +1,4 @@
-from flask_restx import Namespace, Resource
+from flask_restx import Namespace, Resource, fields
 from flask import render_template, redirect, url_for, make_response
 
 from flask_login import login_user, login_required, logout_user
@@ -18,6 +18,7 @@ api = Namespace('user', description="A namespace for User")
 #         "id": fields.Integer(),
 #         "address": fields.String(),
 #         "password": fields.String(),
+#         "authenticated": fields.Boolean(),
 #     }
 # )
 

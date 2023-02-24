@@ -3,10 +3,10 @@ from flask_restx import Api
 from controllers.user_controller import api as user_ns
 
 api = Api(
-    title='My Title',
-    version='1.0',
-    description='A description',
-    # All API metadatas
+    title='HandReader REST API',
+    version='0.1',
+    description='This is HandReader API',
+    # All API metadata
 )
 
 api.add_namespace(user_ns)
