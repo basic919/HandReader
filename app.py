@@ -6,6 +6,8 @@ from controllers import api
 from flask_migrate import Migrate
 from flask_cors import CORS
 
+#from controllers.classification_controller import my_bp
+
 
 app = Flask(__name__)
 CORS(app)
