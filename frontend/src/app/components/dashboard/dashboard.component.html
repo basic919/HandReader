@@ -1,0 +1,8 @@
+<div class="content">
+  <input #Image type="file" accept=".png, .jpg, .jpeg" (change)="handleFileInput($event.target)"/>
+  <img width="100%" *ngIf="imageUrl" [src]="imageUrl" class="image">
+  <br>
+  <button mat-raised-button [disabled]="!fileUploaded" color="primary" type="submit" (click)="predictDigit()">Classify</button>
+  <br>
+  <mat-label style="font-weight: bold; font-size: 30px">{{originalAnswer}}</mat-label>
+</div>

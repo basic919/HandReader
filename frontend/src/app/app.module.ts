@@ -11,23 +11,34 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatButtonModule} from "@angular/material/button";
 import {MatInputModule} from "@angular/material/input";
 import {MatIconModule} from "@angular/material/icon";
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import {MatSelectModule} from "@angular/material/select";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import {MatCardModule} from "@angular/material/card";
+import {MatListModule} from "@angular/material/list";
+
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    HomeComponent
+    HomeComponent,
+    DashboardComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        ReactiveFormsModule,
-        BrowserAnimationsModule,
-        MatButtonModule,
-        MatInputModule,
-        MatIconModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatInputModule,
+    MatIconModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatCardModule,
+    MatListModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
