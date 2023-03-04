@@ -1,6 +1,58 @@
 .content{
   margin: auto;
-  width: 100%;
+  width: 80%;
   padding: 10px;
-  height: 100%;
+  height: 80%;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  flex-direction: column;
+}
+
+.file-input-div{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  margin-top: 2pc;
+  margin-bottom: 2pc;
+  border-radius: 4px;
+  font-weight: normal;
+  background-color: #3f51b5;
+  color: white;
+}
+
+.image{
+  min-height: 200px;
+  min-width: 200px;
+  display: block;
+  object-fit: contain;
+  width: auto;
+  height: auto;
+  max-height: 40%;
+  max-width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.classify-button{
+  width: 5pc;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.response-label{
+  margin-top: 4pc;
+  font-weight: normal;
+  font-size: 30px;
+  margin-left: auto;
+  margin-right: auto;
 }

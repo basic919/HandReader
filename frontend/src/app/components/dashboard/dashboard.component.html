@@ -1,8 +1,13 @@
 <div class="content">
-  <input #Image type="file" accept=".png, .jpg, .jpeg" (change)="handleFileInput($event.target)"/>
-  <img width="100%" *ngIf="imageUrl" [src]="imageUrl" class="image">
+  <div class="file-input-div">
+    <label for="uploader" class="custom-file-upload">
+      <i class="cloud-upload"></i> Upload Image
+    </label>
+    <input id="uploader" #Image type="file" accept=".png, .jpg, .jpeg" (change)="handleFileInput($event.target)"/>
+  </div>
+    <img width="100%" *ngIf="imageUrl" [src]="imageUrl" class="image" alt="">
   <br>
-  <button mat-raised-button [disabled]="!fileUploaded" color="primary" type="submit" (click)="predictDigit()">Classify</button>
+  <button mat-raised-button [disabled]="!fileUploaded" color="primary" type="submit" class="classify-button" (click)="predictDigit()">Classify</button>
   <br>
-  <mat-label style="font-weight: bold; font-size: 30px">{{originalAnswer}}</mat-label>
+  <mat-label class="response-label">{{answerLabel}}</mat-label>
 </div>

@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {AuthResponse} from "../../models/auth-response";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-dashboard',
@@ -7,12 +10,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
+  classifyUrl = environment.apiUrl + "/classification/predict";
+
   fileToUpload: any;
   imageUrl: any;
   fileUploaded = false;
-  originalAnswer = "Please upload an image to be classified"
+  answerLabel = "Upload an image to be classified..."
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) { }
 
   ngOnInit(): void {
 
@@ -29,11 +34,20 @@ export class DashboardComponent implements OnInit {
     }
     reader.readAsDataURL(this.fileToUpload);
     this.fileUploaded = true;
+
+    this.answerLabel = "Click 'Classify' button to get results!"
   }
 
   predictDigit(){
     // TODO: Create prediction method
-    console.log('This is prediction!')
+    console.log(this.fileToUpload)
+    this.answerLabel = "Your digit is: X"
+
+    this.httpClient.post<number>(this.classifyUrl, {
+      image: this.fileToUpload
+    }).subscribe((data)=>{
+      console.log(data);
+    });
   }
 
 }

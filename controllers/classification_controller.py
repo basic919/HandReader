@@ -10,6 +10,10 @@ model = ClassificationModel()
 
 
 @api.route('/predict')
-class Predict(Resource):    # TODO: Change this to POST
-    def get(self):
-        return model.predict()
+class Predict(Resource):
+    def post(self):
+        json_data = request.get_json(force=True)
+        if json_data:
+            return model.predict(json_data.get("image"))
+
+        return -1

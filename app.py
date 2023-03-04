@@ -6,8 +6,6 @@ from controllers import api
 from flask_migrate import Migrate
 from flask_cors import CORS
 
-#from controllers.classification_controller import my_bp
-
 
 app = Flask(__name__)
 CORS(app)
@@ -17,7 +15,7 @@ migrate = Migrate(app, db)
 bcrypt.init_app(app)
 login_manager.init_app(app)
 
-login_manager.login_view = 'user_login'
+# login_manager.login_view = 'user_login'
 
 api.init_app(app)
 
