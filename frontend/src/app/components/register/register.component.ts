@@ -5,8 +5,6 @@ import { HttpClient } from '@angular/common/http';
 import {environment} from "../../../environments/environment";
 
 
-
-
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -18,7 +16,8 @@ export class RegisterComponent implements OnInit {
   registerUrl = environment.apiUrl + "/user/register";
 
 
-  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient) { }
+  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient) {
+  }
 
   ngOnInit(): void {
     this.registrationForm = this.formBuilder.group({
@@ -32,9 +31,9 @@ export class RegisterComponent implements OnInit {
     // TODO: Handle registration logic here
     this.httpClient.post<AuthResponse>(this.registerUrl,
       {
-      address: this.registrationForm.get("email")?.value,
-      password: this.registrationForm.get("password")?.value
-    }).subscribe((data)=>{
+        address: this.registrationForm.get("email")?.value,
+        password: this.registrationForm.get("password")?.value
+      }).subscribe((data) => {
       //console.log(data);
     });
 
