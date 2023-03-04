@@ -16,6 +16,9 @@ import {MatSelectModule} from "@angular/material/select";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import {MatCardModule} from "@angular/material/card";
 import {MatListModule} from "@angular/material/list";
+import { HttpClientModule } from '@angular/common/http';
+
+
 
 
 @NgModule({
@@ -37,7 +40,8 @@ import {MatListModule} from "@angular/material/list";
     MatSelectModule,
     MatFormFieldModule,
     MatCardModule,
-    MatListModule
+    MatListModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

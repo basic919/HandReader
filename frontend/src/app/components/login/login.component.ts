@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {environment} from "../../../environments/environment";
+import { HttpClient } from '@angular/common/http';
+import {AuthResponse} from "../../models/auth-response";
+
 
 
 @Component({
@@ -10,7 +14,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup = new FormGroup({});
 
-  constructor(private formBuilder: FormBuilder) { }
+  loginUrl = environment.apiUrl + "/user/login";
+
+  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient) { }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -22,6 +28,12 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     // TODO: Handle login logic here
+    this.httpClient.post<AuthResponse>(this.loginUrl, {
+      address: this.loginForm.get("email")?.value,
+      password: this.loginForm.get("password")?.value
+    }).subscribe((data)=>{
+      console.log(data);
+    });
   }
 
 }

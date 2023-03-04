@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {AuthResponse} from "../../models/auth-response";
+import { HttpClient } from '@angular/common/http';
+import {environment} from "../../../environments/environment";
 
 
 @Component({
@@ -10,7 +13,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class RegisterComponent implements OnInit {
   registrationForm: FormGroup = new FormGroup({});
 
-  constructor(private formBuilder: FormBuilder) { }
+  registerUrl = environment.apiUrl + "/user/register";
+
+
+  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient) {
+  }
 
   ngOnInit(): void {
     this.registrationForm = this.formBuilder.group({
@@ -22,6 +29,16 @@ export class RegisterComponent implements OnInit {
 
   onSubmit() {
     // TODO: Handle registration logic here
+    this.httpClient.post<AuthResponse>(this.registerUrl,
+      {
+        address: this.registrationForm.get("email")?.value,
+        password: this.registrationForm.get("password")?.value
+      }).subscribe((data) => {
+      //console.log(data);
+    });
+
+    // console.log(this.registrationForm.get("email")?.value)
+    // console.log(this.registrationForm.get("password")?.value)
   }
 
 }
