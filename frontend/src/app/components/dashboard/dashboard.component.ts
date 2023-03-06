@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {AuthResponse} from "../../models/auth-response";
 import {environment} from "../../../environments/environment";
 
 @Component({
@@ -39,14 +38,17 @@ export class DashboardComponent implements OnInit {
   }
 
   predictDigit(){
-    // TODO: Create prediction method
-    console.log(this.fileToUpload)
-    this.answerLabel = "Your digit is: X"
+    const formData = new FormData();
+    formData.append('image', this.fileToUpload);
 
-    this.httpClient.post<number>(this.classifyUrl, {
-      image: this.fileToUpload
-    }).subscribe((data)=>{
+    this.httpClient.post<number>(this.classifyUrl, formData).subscribe((data)=>{
       console.log(data);
+      if(data >= 0){
+        this.answerLabel = "Your digit is: " + data;
+      }
+      else{
+        this.answerLabel = "Invalid input data!"
+      }
     });
   }
 

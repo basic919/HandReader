@@ -14,10 +14,13 @@ class ClassificationModel:
     def predict(self, inp=r'ModelFiles/input_examples/ex0_0.jpg'):  # TODO: Remove default test value
         """inp: path to the image to be classified"""
 
-        img = np.array([np.array(Image.open(inp))])  # noqa
-        img = img.reshape(1, 28, 28, 1)  # noqa
-        img = img.astype('float32')
-        img /= 255
+        try:
+            img = np.array([np.array(Image.open(inp))])  # noqa
+            img = img.reshape(1, 28, 28, 1)  # noqa
+            img = img.astype('float32')
+            img /= 255
+        except ValueError:
+            return -1
 
         return str(np.argmax(self.model.predict(img)))
 
