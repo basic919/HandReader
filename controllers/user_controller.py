@@ -1,8 +1,11 @@
+import itsdangerous
 from flask_restx import Namespace, Resource
 from flask import render_template, make_response, request
 from flask_login import login_user, login_required, logout_user
 from exts import db, bcrypt
 from models.user_model import User
+from models.password_resets import PasswordReset
+from config import Config
 
 
 api = Namespace('user', description="A namespace for User")
@@ -82,3 +85,41 @@ class Register(Resource):
             db.session.commit()
             return True, "Registered"
         return False, "Something went wrong."
+
+@api.route('/forgot_password')
+class ForgotPassword(Resource):
+    def post(self):
+        email = request.json['email']
+
+        existing_reset_address = PasswordReset.query.filter_by(address=email).first()
+        if existing_reset_address:
+            return False, 'That E-Mail address already has a pending reset request. Please check your mail.'
+
+        # Generate a secure token for the user
+        serializer = itsdangerous.URLSafeTimedSerializer(Config.SECRET_KEY)
+        token = serializer.dumps(email, salt='password-reset')
+
+        # Store the token in a database or other persistent storage
+        # ...
+        new_reset = PasswordReset(address=email, token=token)
+        db.session.add(new_reset)
+        db.session.commit()
+
+        # Send an email to the user with a link to the password reset form
+        # ...
+
+        return 'Password reset email sent!'
+
+@api.route('/new_password')
+class Register(Resource):
+    def post(self):
+        token = request.args.get('token')
+        new_hashed_password = bcrypt.generate_password_hash(request.json['new_password'])
+
+        existing_reset = PasswordReset.query.filter_by(token=token).first()
+        if not existing_reset:
+            return False, 'No such reset request.'
+
+        user = User.query.filter_by(address=existing_reset.address).first()
+        user.password = new_hashed_password
+        db.session.commit()

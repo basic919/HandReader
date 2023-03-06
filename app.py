@@ -2,6 +2,7 @@ from flask import Flask
 from config import Config
 from exts import db, bcrypt, login_manager
 from models.user_model import User
+from models.password_resets import PasswordReset
 from controllers import api
 from flask_migrate import Migrate
 from flask_cors import CORS

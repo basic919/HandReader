@@ -11,3 +11,9 @@ class Config:
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(BASE_DIR, 'database.db')
     DEBUG = True
     SQLALCHEMY_ECHO = True
+
+    MAIL_SERVER = 'your-mail-server'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = 'your-mail-username'
+    MAIL_PASSWORD = 'your-mail-password'
