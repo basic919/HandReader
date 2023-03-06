@@ -1,8 +1,9 @@
 from flask import Flask
 from config import Config
-from exts import db, bcrypt, login_manager
+from exts import db, bcrypt, login_manager, mail
 from models.user_model import User
-from models.password_resets import PasswordReset
+from models.password_reset_model import PasswordReset
+from models.user_confirmation_model import UserConfirmation
 from controllers import api
 from flask_migrate import Migrate
 from flask_cors import CORS
@@ -15,8 +16,7 @@ db.init_app(app)
 migrate = Migrate(app, db)
 bcrypt.init_app(app)
 login_manager.init_app(app)
-
-# login_manager.login_view = 'user_login'
+mail.init_app(app)
 
 api.init_app(app)
 

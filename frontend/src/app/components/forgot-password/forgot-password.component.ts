@@ -20,7 +20,7 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   onForgotPassword() {
-    const payload = { email: this.email };
+    const payload = { address: this.email };
 
     this.httpClient.post(this.forgotPasswordUrl, payload)
       .subscribe(

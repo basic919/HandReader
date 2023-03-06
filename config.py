@@ -12,8 +12,10 @@ class Config:
     DEBUG = True
     SQLALCHEMY_ECHO = True
 
-    MAIL_SERVER = 'your-mail-server'
+    MAIL_SERVER = 'smtp.sendgrid.net'
     MAIL_PORT = 587
+    MAIL_USERNAME = 'apikey'
+    MAIL_PASSWORD = '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'
     MAIL_USE_TLS = True
-    MAIL_USERNAME = 'your-mail-username'
-    MAIL_PASSWORD = 'your-mail-password'
+    MAIL_USE_SSL = False
+    MAIL_SENDER_ADDRESS = 'basic919@hotmail.com'
