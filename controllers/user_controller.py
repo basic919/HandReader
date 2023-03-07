@@ -1,21 +1,16 @@
 import itsdangerous
+import jwt
 from flask_restx import Namespace, Resource
-from flask import request, url_for
-from flask_login import login_user, login_required, logout_user, current_user
+from flask import request, url_for, jsonify
 from exts import db, bcrypt, mail
-from models.user_model import User
+from models.user_model import User, token_required
 from models.password_reset_model import PasswordReset
 from config import Config
 from flask_mail import Message
+import datetime
 
 
 api = Namespace('user', description="A namespace for User")
-
-
-# @api.route('/home')
-# class HomeController(Resource):
-#     def get(self):
-#         return make_response(render_template('home.html'))
 
 
 @api.route('/login')
@@ -27,38 +22,24 @@ class Login(Resource):
             user = User.query.filter_by(address=json_data.get("address")).first()
             if user:
                 if bcrypt.check_password_hash(user.password, json_data.get("password")):
-                    login_user(user)
-                    return {"value": True,
-                            "message": "Logged in"}
-        return {"value": False,
-                "message": "Wrong E-Mail or address"}
+                    # login_user(user)
+                    token = jwt.encode({'address': json_data.get("address"),
+                                        'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=120)},
+                                       Config.SECRET_KEY, "HS256")
+
+                    return jsonify({"value": True,
+                                    "message": "Logged in",
+                                    "token": token})
+        return jsonify({"value": False,
+                        "message": "Wrong E-Mail or address"})
 
 
 @api.route('/permission')
 class Permission(Resource):
+    @token_required
     def get(self):
-        if current_user.is_authenticated:
-            return {"value": True,
-                    "message": "Logged in"}
-        else:
-            return {"value": False,
-                    "message": "You need to be logged in."}
-
-
-# @api.route('/logout')
-# class Logout(Resource):
-#     @login_required
-#     def get(self):
-#         logout_user()
-#         return redirect(url_for('user_dashboard'))
-
-@api.route('/logout')
-class Logout(Resource):     # TODO: Finish this
-    @login_required
-    def get(self):
-        logout_user()
-        return {"value": True,
-                "message": "Logged out"}
+        return jsonify({"value": True,
+                        "message": "Logged in"})
 
 
 @api.route('/register')
@@ -70,8 +51,8 @@ class Register(Resource):
             existing_user = User.query.filter_by(address=email).first()
             if existing_user:
                 if existing_user.authenticated:
-                    return {"value": False,
-                            "message": "That E-Mail address already exists. Please choose a different one."}
+                    return jsonify({"value": False,
+                                    "message": "That E-Mail address already exists. Please choose a different one."})
                 else:
                     db.session.delete(existing_user)
                     db.session.commit()
@@ -93,10 +74,10 @@ class Register(Resource):
                           recipients=[email])
             mail.send(msg)
 
-            return {"value": True,
-                    "message": "Registered"}
-        return {"value": False,
-                "message": "Something went wrong."}
+            return jsonify({"value": True,
+                            "message": "Registered"})
+        return jsonify({"value": False,
+                        "message": "Something went wrong."})
 
 
 @api.route('/confirm_email')
@@ -108,11 +89,11 @@ class ConfirmEmail(Resource):
         try:
             email = serializer.loads(token, salt='user-confirmation', max_age=86400)
         except itsdangerous.SignatureExpired:
-            return {"value": False,
-                    "message": "Confirmation link has expired."}
+            return jsonify({"value": False,
+                            "message": "Confirmation link has expired."})
         except itsdangerous.BadSignature:
-            return {"value": False,
-                    "message": "Invalid confirmation link."}
+            return jsonify({"value": False,
+                            "message": "Invalid confirmation link."})
 
         # Mark the user's email as confirmed in the database
 
@@ -120,8 +101,8 @@ class ConfirmEmail(Resource):
         user.authenticated = True
         db.session.commit()
 
-        return {"value": True,
-                "message": "Email confirmed!"}
+        return jsonify({"value": True,
+                        "message": "Email confirmed!"})
 
 
 @api.route('/forgot_password')
@@ -135,8 +116,9 @@ class ForgotPassword(Resource):
         if existing_reset_address:
             try:
                 serializer.loads(existing_reset_address.token, salt='password-reset', max_age=3600)
-                return {"value": False,
-                        "message": "That E-Mail address already has a pending reset request. Please check your mail!"}
+                return jsonify({"value": False,
+                                "message": "That E-Mail address already has a pending reset request. "
+                                           "Please check your mail!"})
             except itsdangerous.SignatureExpired:
                 pass    # 'Password reset link has expired. Crating new one.'
 
@@ -155,8 +137,8 @@ class ForgotPassword(Resource):
                       recipients=[email])   # TODO: Connect with front
         mail.send(msg)
 
-        return {"value": True,
-                "message": "Password reset email sent!"}
+        return jsonify({"value": True,
+                        "message": "Password reset email sent!"})
 
 
 @api.route('/new_password')
@@ -169,11 +151,11 @@ class NewPassword(Resource):
         try:
             email = serializer.loads(token, salt='password-reset', max_age=3600)
         except itsdangerous.SignatureExpired:
-            return {"value": False,
-                    "message": "Password reset link has expired."}
+            return jsonify({"value": False,
+                            "message": "Password reset link has expired."})
         except itsdangerous.BadSignature:
-            return {"value": False,
-                    "message": "Invalid reset link."},
+            return jsonify({"value": False,
+                            "message": "Invalid reset link."})
 
         user = User.query.filter_by(address=email).first()
         user.password = new_hashed_password
@@ -182,5 +164,5 @@ class NewPassword(Resource):
 
         db.session.commit()
 
-        return {"value": True,
-                "message": "New password set successfully."}
+        return jsonify({"value": True,
+                        "message": "New password set successfully."})

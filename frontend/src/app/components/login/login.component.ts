@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import {environment} from "../../../environments/environment";
-import { HttpClient } from '@angular/common/http';
 import {AuthResponse} from "../../models/auth-response";
 import { Router } from '@angular/router';
+import {AuthService} from "../../auth.service";
 
 
 
@@ -13,19 +12,18 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.less']
 })
 export class LoginComponent implements OnInit {
+
   loginForm: FormGroup = new FormGroup({});
 
-  loginUrl = environment.apiUrl + "/user/login";
-  permissionUrl = environment.apiUrl + "/user/permission";
-
-  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient, private router: Router) { }
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
 
-    this.httpClient.get<AuthResponse>(this.permissionUrl, { withCredentials: true }).subscribe((data)=>{
+    this.authService.checkPermission().subscribe((data)=>{
       console.log(data.value)
       if(data.value){
-        console.log(this.router.navigate(['/dashboard']));  // TODO: Woops ne radi!
+        console.log(data.message);
+        this.router.navigate(['/dashboard']);
       }
     });
 
@@ -39,14 +37,13 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     // TODO: Handle login logic here
-    this.httpClient.post<AuthResponse>(this.loginUrl, {
-      address: this.loginForm.get("email")?.value,
-      password: this.loginForm.get("password")?.value
-    }).subscribe((data: AuthResponse)=>{
+    this.authService.login(this.loginForm.get("email")?.value,
+      this.loginForm.get("password")?.value).subscribe((data: AuthResponse)=>{
+      console.log(data);
       if(data.value){
-        console.log(this.router.navigate(['/dashboard']));
+        console.log(data.message);
+        this.router.navigate(['/dashboard']);
       }
     });
   }
-
 }

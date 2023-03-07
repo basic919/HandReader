@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
+import {AuthService} from "../../auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-dashboard',
@@ -16,10 +18,15 @@ export class DashboardComponent implements OnInit {
   fileUploaded = false;
   answerLabel = "Upload an image to be classified..."
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, public authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-
+    this.authService.checkPermission().subscribe((data) => {
+      if(!data.value){
+        console.log(data.message);
+        this.router.navigate(['/login']);
+      }
+    })
   }
 
   handleFileInput(target: any) {
@@ -35,6 +42,11 @@ export class DashboardComponent implements OnInit {
     this.fileUploaded = true;
 
     this.answerLabel = "Click 'Classify' button to get results!"
+  }
+
+  logOut(){
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
   predictDigit(){

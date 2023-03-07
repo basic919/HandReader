@@ -1,8 +1,8 @@
+<mat-toolbar style="">
+    <mat-label>Log In</mat-label>
+</mat-toolbar>
+
 <div class="login-form">
-
-  <h1>Log In</h1>
-
-
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <mat-form-field appearance="fill">
       <mat-label>Email</mat-label>
@@ -22,4 +22,8 @@
     </mat-form-field>
     <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
   </form>
+  <div class="register-div">
+    <mat-label>Don't have an account yet?</mat-label>
+    <button mat-raised-button style="margin-top: 1pc" routerLink="/register">Register</button>
+  </div>
 </div>

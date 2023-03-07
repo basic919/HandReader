@@ -19,6 +19,7 @@ import {MatListModule} from "@angular/material/list";
 import { HttpClientModule } from '@angular/common/http';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { ConfirmEmailComponent } from './components/confirm-email/confirm-email.component';
+import {MatToolbarModule} from "@angular/material/toolbar";
 
 
 
@@ -46,7 +47,8 @@ import { ConfirmEmailComponent } from './components/confirm-email/confirm-email.
     MatCardModule,
     MatListModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    MatToolbarModule
   ],
   providers: [],
   bootstrap: [AppComponent]
