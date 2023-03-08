@@ -34,11 +34,8 @@ export class RegisterComponent implements OnInit {
         address: this.registrationForm.get("email")?.value,
         password: this.registrationForm.get("password")?.value
       }).subscribe((data) => {
-      //console.log(data);
+      console.log(data.message);
     });
-
-    // console.log(this.registrationForm.get("email")?.value)
-    // console.log(this.registrationForm.get("password")?.value)
   }
 
 }

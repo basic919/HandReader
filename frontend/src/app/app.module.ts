@@ -20,6 +20,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { ConfirmEmailComponent } from './components/confirm-email/confirm-email.component';
 import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {AuthInterceptorProvider} from "./auth.interceptor";
+import { NewPasswordComponent } from './components/new-password/new-password.component';
 
 
 
@@ -32,7 +35,8 @@ import {MatToolbarModule} from "@angular/material/toolbar";
     HomeComponent,
     DashboardComponent,
     ForgotPasswordComponent,
-    ConfirmEmailComponent
+    ConfirmEmailComponent,
+    NewPasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -48,9 +52,10 @@ import {MatToolbarModule} from "@angular/material/toolbar";
     MatListModule,
     HttpClientModule,
     FormsModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatProgressBarModule
   ],
-  providers: [],
+  providers: [AuthInterceptorProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

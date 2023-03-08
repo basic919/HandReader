@@ -1,19 +1,20 @@
-<div *ngIf="authService.isLoggedIn$ | async">
-  <mat-toolbar style="flex-direction: row-reverse;">
-    <button mat-raised-button color="accent" class="logout-button" (click)="logOut()">Log Out</button>
-  </mat-toolbar>
+<mat-toolbar style="justify-content: space-between;">
+  <mat-label>Hand Reader</mat-label>
+  <button mat-raised-button color="accent" class="logout-button" (click)="logOut()">Log Out</button>
+</mat-toolbar>
+<mat-progress-bar *ngIf="classifying" mode="indeterminate"></mat-progress-bar>
 
-  <div class="content">
-    <div class="file-input-div">
-      <label for="uploader" class="custom-file-upload">
-        <i class="cloud-upload"></i> Upload Image
-      </label>
-      <input id="uploader" #Image type="file" accept=".png, .jpg, .jpeg" (change)="handleFileInput($event.target)"/>
-    </div>
-      <img width="100%" *ngIf="imageUrl" [src]="imageUrl" class="image" alt="">
-    <br>
-    <button mat-raised-button [disabled]="!fileUploaded" color="primary" type="submit" class="classify-button" (click)="predictDigit()">Classify</button>
-    <br>
-    <mat-label class="response-label">{{answerLabel}}</mat-label>
+<div class="content">
+  <div class="file-input-div">
+    <label for="uploader" class="custom-file-upload">
+      <i class="cloud-upload"></i> Upload Image
+    </label>
+    <input id="uploader" #Image type="file" accept=".png, .jpg, .jpeg" (change)="handleFileInput($event.target)"/>
   </div>
+    <img width="100%" *ngIf="imageUrl" [src]="imageUrl" class="image" alt="">
+  <br>
+  <button mat-raised-button *ngIf="fileUploaded" color="primary" type="submit" class="classify-button" (click)="predictDigit()">Classify</button>
+  <br>
+  <mat-label class="response-label">{{answerLabel}}</mat-label>
 </div>
+

@@ -120,7 +120,9 @@ class ForgotPassword(Resource):
                                 "message": "That E-Mail address already has a pending reset request. "
                                            "Please check your mail!"})
             except itsdangerous.SignatureExpired:
-                pass    # 'Password reset link has expired. Crating new one.'
+                # 'Password reset link has expired. Crating new one.'
+                db.session.delete(existing_reset_address)
+                db.session.commit()
 
         # Generate a secure token for the user
         token = serializer.dumps(email, salt='password-reset')
@@ -131,7 +133,7 @@ class ForgotPassword(Resource):
         db.session.commit()
 
         # Send an email to the user with a link to the password reset form
-        reset_url = url_for('user_new_password', _external=True, token=token)
+        reset_url = Config.FRONTEND_URL + 'new_password/' + token
         message_body = f'Please reset your password by clicking on this link: <a href="{reset_url}">Reset password</a>'
         msg = Message('HandReader: Reset Password Request', sender=Config.MAIL_SENDER_ADDRESS, html=message_body,
                       recipients=[email])   # TODO: Connect with front

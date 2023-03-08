@@ -1,4 +1,4 @@
-<mat-toolbar style="">
+<mat-toolbar>
     <mat-label>Log In</mat-label>
 </mat-toolbar>
 
@@ -20,10 +20,19 @@
         <span *ngIf="loginForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</span>
       </mat-error>
     </mat-form-field>
-    <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
+      <mat-label *ngIf="!loginMessage" style="color: red">Incorrect password or e-mail.</mat-label>
+    </div>
+<!--    <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>-->
   </form>
-  <div class="register-div">
+
+
+  <div class="routes-div">
     <mat-label>Don't have an account yet?</mat-label>
-    <button mat-raised-button style="margin-top: 1pc" routerLink="/register">Register</button>
+    <button mat-raised-button style="margin-top: 8px" routerLink="/register">Register</button>
+
+    <mat-label style="margin-top: 2pc">Don't remember your password?</mat-label>
+    <button mat-raised-button style="margin-top: 8px" routerLink="/forgot_password">Forgot Password</button>
   </div>
 </div>

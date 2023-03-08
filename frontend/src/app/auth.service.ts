@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {AuthResponse} from "./models/auth-response";
 import {environment} from "../environments/environment";
 import {BehaviorSubject, tap} from "rxjs";
+import {TokenProviderService} from "./token-provider.service";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class AuthService {
   loginUrl = environment.apiUrl + "/user/login";
   permissionUrl = environment.apiUrl + "/user/permission";
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private tokenProvider: TokenProviderService) {
 
     this.checkPermission().subscribe((data: AuthResponse) => {
       this._isLoggedIn$.next(data.value);
@@ -28,19 +29,16 @@ export class AuthService {
       password: password
     }).pipe(tap((response: any) => {
       this._isLoggedIn$.next(true);
-      localStorage.setItem('auth_token', response.token);
+      this.tokenProvider.token = response.token;
     })
     );
   }
 
   logout(){
-    localStorage.setItem('auth_token', '');
+    this.tokenProvider.removeToken();
   }
 
   checkPermission(){
-    // @ts-ignore
-    const token: string  = localStorage.getItem('auth_token') ? localStorage.getItem('auth_token') : "";
-    return this.httpClient.get<AuthResponse>(this.permissionUrl,
-      {headers: new HttpHeaders({"x-access-tokens": token})});
+    return this.httpClient.get<AuthResponse>(this.permissionUrl);
   }
 }

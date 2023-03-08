@@ -1,5 +1,8 @@
+<mat-toolbar>
+    <mat-label>Register</mat-label>
+</mat-toolbar>
+
 <div class="registration-form">
-  <h1>Register</h1>
   <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
     <mat-form-field appearance="fill">
       <mat-label>Email</mat-label>
@@ -27,4 +30,9 @@
                style="color: #ff0000; display: block; font-size: 1rem">Passwords do not match</mat-label>
     <button mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid || registrationForm.get('confirmPassword')?.value !== registrationForm.get('password')?.value">Register</button>
   </form>
+
+  <div class="login-div">
+    <mat-label>Have an account already?</mat-label>
+    <button mat-raised-button style="margin-top: 1pc" routerLink="/login">Log In</button>
+  </div>
 </div>

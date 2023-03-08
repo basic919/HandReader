@@ -11,22 +11,18 @@ import {Router} from "@angular/router";
 })
 export class DashboardComponent implements OnInit {
 
-  classifyUrl = environment.apiUrl + "/classification/predict";
-
   fileToUpload: any;
   imageUrl: any;
   fileUploaded = false;
   answerLabel = "Upload an image to be classified..."
 
+  predictUrl = environment.apiUrl + "/classification/predict";
+
+  classifying: boolean = false;
+
   constructor(private httpClient: HttpClient, public authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    this.authService.checkPermission().subscribe((data) => {
-      if(!data.value){
-        console.log(data.message);
-        this.router.navigate(['/login']);
-      }
-    })
   }
 
   handleFileInput(target: any) {
@@ -50,16 +46,20 @@ export class DashboardComponent implements OnInit {
   }
 
   predictDigit(){
+
+    this.classifying = true;
+
     const formData = new FormData();
     formData.append('image', this.fileToUpload);
 
-    this.httpClient.post<number>(this.classifyUrl, formData).subscribe((data)=>{
+    this.httpClient.post<number>(this.predictUrl, formData).subscribe((data)=>{
       console.log(data);
-      if(data >= 0){
-        this.answerLabel = "Your digit is: " + data;
+      this.classifying = false;
+      if(data < 0){
+        this.answerLabel = "Invalid input data!"
       }
       else{
-        this.answerLabel = "Invalid input data!"
+        this.answerLabel = "Your digit is: " + data;
       }
     });
   }

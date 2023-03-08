@@ -17,16 +17,16 @@ export class LoginComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) { }
 
+  loginMessage = true;
+
   ngOnInit(): void {
 
     this.authService.checkPermission().subscribe((data)=>{
-      console.log(data.value)
       if(data.value){
         console.log(data.message);
         this.router.navigate(['/dashboard']);
       }
     });
-
 
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -36,14 +36,13 @@ export class LoginComponent implements OnInit {
 
 
   onSubmit() {
-    // TODO: Handle login logic here
     this.authService.login(this.loginForm.get("email")?.value,
       this.loginForm.get("password")?.value).subscribe((data: AuthResponse)=>{
-      console.log(data);
-      if(data.value){
-        console.log(data.message);
-        this.router.navigate(['/dashboard']);
-      }
+        this.loginMessage = data.value;
+        if(data.value){
+          console.log(data.message);
+          this.router.navigate(['/dashboard']);
+        }
     });
   }
 }

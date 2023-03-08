@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 
 @Component({
@@ -11,21 +12,25 @@ import {environment} from "../../../environments/environment";
 export class ForgotPasswordComponent implements OnInit {
 
     forgotPasswordUrl = environment.apiUrl + "/user/forgot_password";
-    email: string = '';
+    forgotPasswordForm: FormGroup = new FormGroup({});
 
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient) { }
 
   ngOnInit(): void {
+
+    this.forgotPasswordForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]]
+    });
   }
 
   onForgotPassword() {
-    const payload = { address: this.email };
 
-    this.httpClient.post(this.forgotPasswordUrl, payload)
+    this.httpClient.post(this.forgotPasswordUrl, {address: this.forgotPasswordForm.get("email")?.value})
       .subscribe(
-        (response) => console.log(response),
-        (error) => console.log(error)
+        (response) => {
+          console.log(response)
+        }
       );
 }
 
