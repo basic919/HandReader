@@ -1,0 +1,18 @@
+version: "3.3"
+services:
+    app-backend:
+        build: .
+        container_name: backend
+        restart: always
+        ports:
+            - "5000:5000"
+        expose:
+            - "5000"
+    app-frontend:
+        build: ./frontend
+        container_name: frontend
+        restart: always
+        ports:
+            - "4200:80"
+        expose:
+            - "4200"

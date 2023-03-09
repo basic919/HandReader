@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from config import Config
-from exts import db, bcrypt, login_manager, mail
+from exts import db, bcrypt, mail
 from models.user_model import User
 from models.password_reset_model import PasswordReset
 from controllers import api
@@ -14,16 +14,10 @@ app.config.from_object(Config)
 db.init_app(app)
 migrate = Migrate(app, db)
 bcrypt.init_app(app)
-login_manager.init_app(app)
 mail.init_app(app)
 
 api.init_app(app)
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=False)

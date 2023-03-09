@@ -28,7 +28,6 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit() {
-    // TODO: Handle registration logic here
     this.httpClient.post<AuthResponse>(this.registerUrl,
       {
         address: this.registrationForm.get("email")?.value,

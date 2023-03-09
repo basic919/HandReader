@@ -23,7 +23,7 @@ import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {AuthInterceptorProvider} from "./auth.interceptor";
 import { NewPasswordComponent } from './components/new-password/new-password.component';
-
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 
 
@@ -55,7 +55,7 @@ import { NewPasswordComponent } from './components/new-password/new-password.com
     MatToolbarModule,
     MatProgressBarModule
   ],
-  providers: [AuthInterceptorProvider],
+  providers: [AuthInterceptorProvider, {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
