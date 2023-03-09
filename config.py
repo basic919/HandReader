@@ -19,4 +19,4 @@ class Config:
     MAIL_USE_SSL = False
     MAIL_SENDER_ADDRESS = 'basic919@hotmail.com'
 
-    FRONTEND_URL = 'http://localhost:4200/'
+    FRONTEND_URL = 'http://localhost:4200/#/'   # IMPORTANT: This will depend on the actual frontend deployment URL
