@@ -13,10 +13,10 @@ class Config:
 
     MAIL_SERVER = 'smtp.sendgrid.net'
     MAIL_PORT = 587
-    MAIL_USERNAME = 'apikey'
-    MAIL_PASSWORD = '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'
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
-    MAIL_SENDER_ADDRESS = 'basic919@hotmail.com'
+    MAIL_USERNAME = 'api_username'
+    MAIL_SENDER_ADDRESS = 'MAIL_ADDRESS'
+    MAIL_PASSWORD = 'MAILING_API_KEY'
 
     FRONTEND_URL = 'http://localhost:4200/#/'   # IMPORTANT: This will depend on the actual frontend deployment URL
