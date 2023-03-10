@@ -15,8 +15,8 @@ class Config:
     MAIL_PORT = 587
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
-    MAIL_USERNAME = 'api_username'
-    MAIL_SENDER_ADDRESS = 'MAIL_ADDRESS'
-    MAIL_PASSWORD = 'MAILING_API_KEY'
+    MAIL_SENDER_ADDRESS = 'basic919@hotmail.com'
+    MAIL_USERNAME = 'apikey'
+    MAIL_PASSWORD = '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'
 
     FRONTEND_URL = 'http://localhost:4200/#/'   # IMPORTANT: This will depend on the actual frontend deployment URL

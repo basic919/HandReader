@@ -13,17 +13,19 @@ def login_user(json_data):
     if json_data:
         user = User.query.filter_by(address=json_data.get("address")).first()
         if user:
+            if not user.authenticated:
+                return jsonify({"value": False,
+                                "message": "User needs to be authenticated first."})
             if bcrypt.check_password_hash(user.password, json_data.get("password")):
-                # login_user(user)
                 token = jwt.encode({'address': json_data.get("address"),
                                     'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=120)},
                                    Config.SECRET_KEY, "HS256")
 
                 return jsonify({"value": True,
-                                "message": "Logged in",
+                                "message": "Logged in.",
                                 "token": token})
     return jsonify({"value": False,
-                    "message": "Wrong E-Mail or address"})
+                    "message": "Wrong E-Mail or address."})
 
 
 def register_user(email, password):
@@ -58,6 +60,7 @@ def register_user(email, password):
                         "message": "Registered"})
     return jsonify({"value": False,
                     "message": "Something went wrong."})
+
 
 def confirm_email(token):
     # Verify the token to ensure that it's valid and retrieve the user's email address

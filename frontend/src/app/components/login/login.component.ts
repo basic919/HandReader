@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) { }
 
-  loginMessage = true;
+  loginMessage = "";
 
   ngOnInit(): void {
 
@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.authService.login(this.loginForm.get("email")?.value,
       this.loginForm.get("password")?.value).subscribe((data: AuthResponse)=>{
-        this.loginMessage = data.value;
+        this.loginMessage = data.message;
         if(data.value){
           console.log(data.message);
           this.router.navigate(['/dashboard']);

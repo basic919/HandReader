@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {AuthResponse} from "../../models/auth-response";
 import { HttpClient } from '@angular/common/http';
 import {environment} from "../../../environments/environment";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -16,7 +17,7 @@ export class RegisterComponent implements OnInit {
   registerUrl = environment.apiUrl + "/user/register";
 
 
-  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient) {
+  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -33,8 +34,10 @@ export class RegisterComponent implements OnInit {
         address: this.registrationForm.get("email")?.value,
         password: this.registrationForm.get("password")?.value
       }).subscribe((data) => {
-      console.log(data.message);
-    });
+        if(data.value) {
+          console.log(data.message);
+          this.router.navigate(['/login']);
+        }
+      });
   }
-
 }

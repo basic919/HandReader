@@ -22,7 +22,7 @@
     </mat-form-field>
     <div style="display: flex; justify-content: space-between; align-items: center;">
       <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
-      <mat-label *ngIf="!loginMessage" style="color: red">Incorrect password or e-mail.</mat-label>
+      <mat-label style="color: red">{{loginMessage}}</mat-label>
     </div>
 <!--    <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>-->
   </form>
